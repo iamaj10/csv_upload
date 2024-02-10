@@ -1,0 +1,108 @@
+<div class="text-center mt-4 fw-bold"><%= fileName %></div>
+
+<!-- search bar -->
+<div class="d-flex justify-content-center mt-4">
+  <span class="d-flex align-items-center">
+    <a href="/" class="back-icon">
+      <i
+        class="fa-solid fa-circle-arrow-left me-2"
+        style="color: #000000; font-size: 30px"
+      ></i>
+    </a>
+  </span>
+  <span class="d-flex align-items-center">
+    <form id="searchForm">
+      <div class="">
+        <input
+          type="text"
+          id="search-input"
+          style="
+            height: 40px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-right: 10px;
+            outline: #ccc;
+          "
+          placeholder="Search data"
+        />
+      </div>
+    </form>
+  </span>
+
+  <span class="d-flex align-items-center justify-content-center ms-3">
+    <span id="total-rows">Total Rows: <%=length%></span>
+  </span>
+</div>
+
+<!-- search results -->
+<div class="mt-4">
+  <table id="result-table" class="table table-striped text-center">
+    <thead class="table-dark">
+      <tr>
+        <% for(let h of head) { %>
+        <th><%= h %></th>
+        <% } %>
+      </tr>
+    </thead>
+    <tbody>
+      <% for(let row of data) { %>
+      <tr>
+        <% for(let key of Object.keys(row)) { %>
+        <td><%= row[key] %></td>
+        <% } %>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+
+<!-- Search script -->
+<script>
+  // Get the search input element
+  const searchInput = document.getElementById("search-input");
+
+  // Get the table element
+  const table = document.getElementById("result-table");
+
+  // Get the table header row (assumes it's the first row)
+  const tableHeader = table.getElementsByTagName("tr")[0];
+  tableHeader.classList.add("table-dark");
+
+  // Create an array to store table data
+  const tableData = Array.from(table.querySelectorAll("tr")).map((row) =>
+    Array.from(row.querySelectorAll("td")).map((cell) =>
+      cell.textContent.trim()
+    )
+  );
+
+  // Listen for the "keyup" event on the search input
+  searchInput.addEventListener("keyup", function () {
+    // Get the input value and convert it to lowercase
+    const input = searchInput.value.toLowerCase();
+
+    // Filter the table data based on the input
+    const filteredData = tableData.filter((row) => {
+      return row.join(" ").toLowerCase().includes(input);
+    });
+
+    // Clear the table body (excluding the header)
+    const tableBody = table.querySelector("tbody");
+    tableBody.innerHTML = "";
+
+    // Append the header row back
+    tableBody.appendChild(tableHeader);
+
+    // Create and append rows for the filtered data
+    for (const rowData of filteredData) {
+      const row = document.createElement("tr");
+      for (const cellText of rowData) {
+        const cell = document.createElement("td");
+        cell.textContent = cellText;
+        row.appendChild(cell);
+      }
+      tableBody.appendChild(row);
+    }
+  });
+</script>
