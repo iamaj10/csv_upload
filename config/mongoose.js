@@ -2,7 +2,8 @@
 const mongoose = require("mongoose");
 
 // storing the db on mongo atlas
-const DB = "mongodb://127.0.0.1:27017/csv_upload";
+const DB =
+  "mongodb+srv://dbUser:dbUserPassword@atlascluster.nesbr6t.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose
   .connect(DB)
@@ -10,9 +11,6 @@ mongoose
     console.log("Connection successful!");
   })
   .catch((err) => console.log("no connection " + err));
-
-// MAKING CONNECTION
-// const DB = mongoose.connect('mongodb://127.0.0.1:27017/csvUploads');
 
 const db = mongoose.connection;
 
